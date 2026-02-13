@@ -1,0 +1,27 @@
+name: Deploy CIPP-API to Azure Function App
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_NAME: 'cipp3pgvq'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v3
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
